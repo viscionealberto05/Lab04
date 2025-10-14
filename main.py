@@ -40,8 +40,11 @@ def main():
             codice_cabina = input("Codice cabina: ")
             codice_passeggero = input("Codice passeggero: ")
             try:
-                crociera.assegna_passeggero_a_cabina(codice_cabina, codice_passeggero)
-                print("Cabina assegnata con successo.")
+                lista_assegnazioni = crociera.assegna_passeggero_a_cabina(codice_cabina, codice_passeggero)
+                if lista_assegnazioni != None:
+                    for assegnazione in lista_assegnazioni:
+                        print(assegnazione)
+                    print("Cabina assegnata con successo.")
             except Exception as e:
                 print(f"Errore: {e}")
 

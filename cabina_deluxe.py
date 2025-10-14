@@ -18,3 +18,11 @@ class CabinaDeluxe(Cabina):
         
     def __str__(self):
         return f"{super().__str__()}, Tipologia Cabina: {self._tipologia}"
+
+    def assegnaParametri(self, valori):
+        codice_cab = valori[0]
+        letti = valori[1]
+        ponte = valori[2]
+        prezzo = int(valori[3])*1.2
+        tipologia = valori[4]
+        return CabinaDeluxe(codice_cab,letti,ponte,prezzo,tipologia)

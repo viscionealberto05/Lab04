@@ -9,3 +9,9 @@ class Cabina:
     def __str__(self):
         return (f"Cabina: {self.codice_cab}, {self.letti} Letti, Ponte {self.ponte}, Prezzo: {self.prezzo} $")
 
+    def assegnaParametri(self, valori):
+        codice_cab = valori[0]
+        letti = valori[1]
+        ponte = valori[2]
+        prezzo = int(valori[3])
+        return Cabina(codice_cab, letti, ponte, prezzo)
