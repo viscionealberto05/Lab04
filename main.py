@@ -19,12 +19,19 @@ def main():
 
         if scelta == "1":
             nuovo_nome = input("Inserisci il nuovo nome della crociera: ")
-            # TODO: Aggiorna il nome della crociera
+
+            crociera.nome = nuovo_nome
+
+            #CODICE DI CONTROLLO PER AVVENUTA MODIFICA DEL NOME
+            print(crociera.nome)
 
         elif scelta == "2":
             file_path = "dati_crociera.csv"
             try:
-                crociera.carica_file_dati(file_path)
+                liste = crociera.carica_file_dati(file_path)
+                for lista in liste:
+                    for elemento in lista:
+                        print(elemento)
                 print("Dati caricati correttamente.")
             except FileNotFoundError:
                 print("File non trovato.")
