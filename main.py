@@ -28,11 +28,17 @@ def main():
         elif scelta == "2":
             file_path = "dati_crociera.csv"
             try:
-                liste = crociera.carica_file_dati(file_path)
+
+                #ISTRUZIONI DI PROVA PER LA STAMPA:
+
+                """liste = crociera.carica_file_dati(file_path)
                 for lista in liste:
                     for elemento in lista:
-                        print(elemento)
-                print("Dati caricati correttamente.")
+                        print(elemento)"""
+
+
+                if crociera.carica_file_dati(file_path) == True:
+                        print("Dati caricati correttamente.")
             except FileNotFoundError:
                 print("File non trovato.")
 
@@ -40,11 +46,17 @@ def main():
             codice_cabina = input("Codice cabina: ")
             codice_passeggero = input("Codice passeggero: ")
             try:
-                lista_assegnazioni = crociera.assegna_passeggero_a_cabina(codice_cabina, codice_passeggero)
+
+                #ISTRUZIONI DI PROVA PER LA STAMPA:
+
+                """lista_assegnazioni = crociera.assegna_passeggero_a_cabina(codice_cabina, codice_passeggero)
                 if lista_assegnazioni != None:
                     for assegnazione in lista_assegnazioni:
-                        print(assegnazione)
-                    print("Cabina assegnata con successo.")
+                        print(assegnazione)"""
+
+                if crociera.assegna_passeggero_a_cabina(codice_cabina, codice_passeggero) == True:
+                        print("Cabina assegnata con successo.")
+
             except Exception as e:
                 print(f"Errore: {e}")
 

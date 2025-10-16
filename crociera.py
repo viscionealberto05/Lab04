@@ -7,21 +7,19 @@ from operator import attrgetter
 
 class Crociera:
 
-
-
     def __init__(self, nome):
 
         """Inizializza gli attributi e le strutture dati"""
 
-        self._nome = nome
-        self.cabine = []
-        self.passeggeri = []
+        self._nome = nome       #inizializzo gli attributi con le liste per passeggeri, assegnazioni
+        self.cabine = []        #cabine_libere e passeggeri_libere verranno impiegate per i controlli sulle assegnazioni
+        self.passeggeri = []    #tra passeggeri e cabine
         self.assegnazioni = []
-        #self.cabine_libere = list(self.cabine)
-        #self.passeggeri_liberi = list(self.passeggeri)
+        self.cabine_libere = list(self.cabine)
+        self.passeggeri_liberi = list(self.passeggeri)
 
 
-    @property
+    @property      #Definisco metodi getter e setter per il cambio nome della crociera
     def nome(self):
         return self._nome
 
@@ -36,7 +34,15 @@ class Crociera:
     def carica_file_dati(self, file_path):
         """Carica i dati (cabine e passeggeri) dal file"""
 
-        try:    #USARE DUCKTYPING --> magarin fare una funzione (metodo) che prende per argomernto la lista di parametri e dpopo li assegna in auotmatico come attributi
+        """Trasformo ciascuna riga del file in una lista di campi, e a seconda della presenza di
+        4 o 5 campi chiamo il metodo per la classe corrispondente, verifico se il 5^o campo è
+        alfabetico o un numero.
+        
+        
+        Aggiungo le singole cabine e passeggeri alle rispettive liste, aggiungo l'eccezione per il file non trovato
+        e chiudo il file"""
+
+        try:
             fileIn = open(file_path,"r",encoding="utf-8")
             for line in fileIn:
                 valori = line.strip().split(",")
@@ -51,6 +57,7 @@ class Crociera:
                     else:
                         cab = Cabina(None, None, None, None).assegnaParametri(valori)
                     self.cabine.append(cab)
+                    self.cabine_libere.append(cab)
 
                 else:
                     codice = valori[0]
@@ -58,15 +65,13 @@ class Crociera:
                     cognome = valori[2]
                     passenger = Passeggero(codice, nome, cognome)
                     self.passeggeri.append(passenger)
+                    self.passeggeri_liberi.append(passenger)
 
             fileIn.close()
 
-            liste = [self.passeggeri,self.cabine]
+            #liste = [self.passeggeri,self.cabine]
 
-            self.cabine_libere = list(self.cabine)
-            self.passeggeri_liberi = list(self.passeggeri)
-
-            return liste
+            return True
 
         except FileNotFoundError:
             raise FileNotFoundError(f"File {file_path} non trovato")
@@ -74,6 +79,10 @@ class Crociera:
 
     def assegna_passeggero_a_cabina(self, codice_cabina, codice_passeggero):
         """Associa una cabina a un passeggero"""
+
+        """Effettuo le verifiche per accertarmi che il passeggero e la cabiona esistano e controllo nelle rispettive liste
+         se sono liberi/e o meno, così da poter fare l'assegnazione e aggiungerla alla lista che le contiene, precedentemente inizializzata
+         come attributo"""
 
         ExistingPassenger = False
         ExistingCabin = False
@@ -102,11 +111,10 @@ class Crociera:
                     FreeCabin = True
                     break
 
-
-
         if ExistingPassenger and ExistingCabin and FreeCabin and FreePassenger:
                 ass = Assegnazione(codice_cabina,codice_passeggero)
                 self.assegnazioni.append(ass)
+                Ass_avvenuta=True
 
                 for p in enumerate(self.passeggeri_liberi):
                     if p[1].codice == codice_passeggero:
@@ -119,7 +127,7 @@ class Crociera:
                     break
 
 
-                return self.assegnazioni
+                return Ass_avvenuta
         else:
             print("Valori inseriti non validi")
             return None
@@ -128,12 +136,16 @@ class Crociera:
     def cabine_ordinate_per_prezzo(self):
         """Restituisce la lista ordinata delle cabine in base al prezzo"""
 
+        """Riordino con attrgetter la lista cabine creandone una nuova e la passo al main con il return"""
+
         cabine_ordinate = sorted(self.cabine, key=attrgetter("prezzo"))
         return cabine_ordinate
 
 
     def elenca_passeggeri(self):
         """Stampa l'elenco dei passeggeri mostrando, per ognuno, la cabina a cui è associato, quando applicabile """
+
+        """Stampo le associazioni passeggero cabina con un ciclo for annidato verificando i codici passeggero come identici"""
 
         for p in self.passeggeri:
             for a in self.assegnazioni:
